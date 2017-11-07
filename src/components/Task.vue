@@ -1,6 +1,7 @@
 <template>
-  <div class="hello">
-    Home
+  <div >
+
+    Task
   </div>
 </template>
 

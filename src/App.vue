@@ -3,7 +3,7 @@
 
     <v-navigation-drawer persistent clipped enable-resize-watcher v-model="drawer" app>
       <v-list dense>
-        <v-list-tile v-for="item in items" :key="item.text" @click="">
+        <v-list-tile v-for="item in items" :key="item.title" :to="item.link">
           <v-list-tile-action>
             <v-icon :color="item.color">{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -52,11 +52,11 @@
     data: () => ({
       drawer: true,
       items: [
-        { title: 'Gestão de atividades', icon: 'home',  link: 'home', color: 'white' }, 
-        { title: 'Projetos', icon: 'assignment',  link: 'projeto', color: 'blue' },
-        { title: 'Tarefas', icon: 'fa-tasks',  link: 'tarefa', color: 'red' }, 
+        { title: 'Gestão de atividades', icon: 'home',  link: '/', color: 'white' }, 
+        { title: 'Projetos', icon: 'assignment',  link: 'project', color: 'blue' },
+        { title: 'Tarefas', icon: 'fa-tasks',  link: 'task', color: 'red' }, 
         { title: 'Sprints', icon: 'motorcycle',  link: 'sprint', color: 'yellow' }, 
-        { title: 'Atividades contínuas', icon: 'fa-spinner',  link: 'atividade-continua', color: 'green' }
+        { title: 'Atividades contínuas', icon: 'fa-spinner',  link: 'continuous_activity', color: 'green' }
       ],
       user_actions: [
         { title: 'Login', color: 'green--text' }, 

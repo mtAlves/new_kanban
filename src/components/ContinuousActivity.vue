@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    Home
+    Cotinuous
   </div>
 </template>
 
