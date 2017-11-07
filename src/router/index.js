@@ -8,13 +8,14 @@ import Project from '@/components/Project';
 import Sprint from '@/components/Sprint';
 import Task from '@/components/Task';
 
+import { config } from '../config'
+
 Vue.use(Router)
 
 
-import auth from '@/core/auth'
 
 function requireAuth (to, from, next) {
-  if (!auth.loggedIn()) {
+  if (config.localstore == null || config.localstore.get('token', '') == '') {
     next({
       path: '/login',
       query: { redirect: to.fullPath }

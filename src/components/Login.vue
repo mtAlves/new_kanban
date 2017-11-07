@@ -10,8 +10,8 @@
             <v-layout row>
               <v-flex xs12>
                 <v-text-field
-                  placeholder="Username" single-line
-                  append-icon="account_box" class="blue--text" hide-details> 
+                  placeholder="Username" single-line v-model="user.user_name"
+                  append-icon="account_box" class="blue-grey--text mb-2" hide-details> 
                   </v-text-field>
               </v-flex>
             </v-layout>
@@ -19,9 +19,9 @@
             <v-layout row>
               <v-flex xs12>
                 <v-text-field
-                  placeholder="Password" single-line type="password"
-                  append-icon="vpn_key" class="blue--text mb-5" hide-details> 
-                  </v-text-field>
+                  placeholder="Password" single-line type="password" v-model="user.password"
+                  append-icon="vpn_key" class="blue-grey--text mb-5" hide-details @keyup.enter="login"> 
+                </v-text-field>
               </v-flex>
             </v-layout>
             <v-btn class="cyan--text" type="submit">login</v-btn>
@@ -33,34 +33,47 @@
 </template>
 
 <script>
-import auth from '../core/auth'
+import store from '../core/index';
+import {config, Base} from '../config';
+import axios from 'axios';
 
 export default {
   data () {
     return {
-      user: '',
-      password: '',
-      error: false,
-      text: ''
+      user: {}
     }
   },
   methods: {
 
-    login () {
-      auth.login(this.user, this.password, (loggedIn, err) => {
-        if (err) {
-          console.log('login', err)
-          this.error = true
-          this.text = err
-        } else if (loggedIn === false) {
-          console.log('login', loggedIn)
-          this.error = true
-          this.text = 'Bad login information'
-        } else {
-          console.log(this.$route)
-          this.$router.push(this.$route.query.redirect || '/')
-        }
-      })
+    lastCharIsBar(an_url) {
+      if (an_url != null )
+        return an_url.slice(-1) == '/';
+      return false;
+    },
+
+    idFromUrl(an_url) {
+        if (an_url == null)
+          return -1;
+        //console.log(an_url.slice(-1) == '/');
+        let i =  this.lastCharIsBar(an_url) ? 1:0;
+        return parseInt(an_url.split('/').reverse()[i]);
+    },
+
+    login(){
+      let url = 'user-list/login/';
+          this.user.password = Base.encode(this.user.password);
+          axios.post(url, this.user).then( response => {
+              if (response.status == 201) {
+                this.user.id = this.idFromUrl(response.headers['content-location']);
+                config.localstore.set('token', response.headers['x-access-token']);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${config.localstore.get('token','')}`;
+                this.$router.push('/');
+              }
+            
+          })
+          .catch(error => {
+            console.log(error);
+          });
     }
 
   }
@@ -70,7 +83,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-  .title{
+  .title {
     font-family: 'Architects Daughter';
     font-size: 3em !important;
     color: #00b2cc;
