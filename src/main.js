@@ -18,7 +18,7 @@ import VueLocalStorage from 'vue-localstorage';
 Vue.use(VueLocalStorage);
 config.localstore = Vue.localStorage;
 axios.defaults.headers.common['Authorization'] = `Bearer ${config.localstore.get('token','')}`;
-axios.defaults.baseURL = 'http://172.30.11.26:3000/scrum-list/';
+axios.defaults.baseURL = 'http://localhost:8000/scrum-list/';
 axios.defaults.headers.common['Accept'] = 'application/json';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 

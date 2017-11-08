@@ -1,9 +1,6 @@
 
 export default {
 
-  loginLoading (state) {
-    state.callingAPI = !state.callingAPI
-  },
   setUser (state, user) {
     state.user = user
   },
@@ -12,6 +9,12 @@ export default {
   },
   setUserInfo (state, userInfo) {
     state.userInfo = userInfo
+  },
+
+  logout (state) {
+    state.user = null;
+    state.token = null;
+    state.userInfo = null;
   }
   
 }

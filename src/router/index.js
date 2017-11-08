@@ -4,18 +4,19 @@ import Router from 'vue-router';
 import ContinuousActivity from '@/components/ContinuousActivity';
 import Home from '@/components/Home';
 import Login from '@/components/Login';
+import Register from '@/components/Register';
 import Project from '@/components/Project';
 import Sprint from '@/components/Sprint';
 import Task from '@/components/Task';
 
-import { config } from '../config'
+import store from '@/core'
 
 Vue.use(Router)
 
 
 
 function requireAuth (to, from, next) {
-  if (config.localstore == null || config.localstore.get('token', '') == '') {
+  if (store.state.token == null || store.state.toke == '') {
     next({
       path: '/login',
       query: { redirect: to.fullPath }
@@ -38,6 +39,11 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
     },
     { path: '/logout',
         beforeEnter (to, from, next) {

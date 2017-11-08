@@ -28,8 +28,16 @@
           </v-btn>
         </v-toolbar-title>
         <v-list>
-          <v-list-tile @click="logout">
+          <v-list-tile v-if="getToken" @click="logout">
             <v-list-tile-title class="red--text"> Logout </v-list-tile-title>
+          </v-list-tile>
+
+          <v-list-tile v-if="this.$route.name == 'Login'" @click="register">
+            <v-list-tile-title class="blue--text"> Registrar </v-list-tile-title>
+          </v-list-tile>
+
+          <v-list-tile v-if="this.$route.name == 'Register'" @click="login">
+            <v-list-tile-title class="blue--text"> Login </v-list-tile-title>
           </v-list-tile>
         </v-list>
       </v-menu>
@@ -48,8 +56,9 @@
 </template>
 
 <script>
-import {config} from './config';
 import axios from 'axios';
+import store from '@/core';
+import { mapGetters } from 'vuex'
 
   export default {
     data: () => ({
@@ -66,12 +75,26 @@ import axios from 'axios';
     }),
 
     methods: {
-
-      logout(){
-        config.localstore.set('token', '');
+      login (){
+        this.$router.push('/login');
+      },
+      logout (){
+        store.commit('logout');
         axios.defaults.headers.common['Authorization'] = null;
         this.$router.push('/login');
+      },
+
+      register () {
+        this.$router.push('/register');
       }
+
+    },
+
+    computed: {
+      ...mapGetters ([
+        'getToken'
+
+      ])
 
     },
 

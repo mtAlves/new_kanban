@@ -19,7 +19,7 @@
             <v-layout row>
               <v-flex xs12>
                 <v-text-field
-                  placeholder="Password" single-line type="password" v-model="user.password"
+                  placeholder="Password" single-line type="password" v-model="temp_pass"
                   append-icon="vpn_key" class="blue-grey--text mb-5" hide-details @keyup.enter="login"> 
                 </v-text-field>
               </v-flex>
@@ -33,13 +33,15 @@
 </template>
 
 <script>
-import store from '../core/index';
-import {config, Base} from '../config';
 import axios from 'axios';
+import store from '../core';
+import { mapActions } from 'vuex'
+import { config, Base } from '../config';
 
 export default {
   data () {
     return {
+      temp_pass: '',
       user: {}
     }
   },
@@ -61,13 +63,18 @@ export default {
 
     login(){
       let url = 'user-list/login/';
-          this.user.password = Base.encode(this.user.password);
+          this.user.password = Base.encode(this.temp_pass);
           axios.post(url, this.user).then( response => {
+
               if (response.status == 201) {
+
                 this.user.id = this.idFromUrl(response.headers['content-location']);
-                config.localstore.set('token', response.headers['x-access-token']);
-                axios.defaults.headers.common['Authorization'] = `Bearer ${config.localstore.get('token','')}`;
+                store.commit('setUser', this.user.user_name);
+                store.commit('setToken', response.headers['x-access-token']);
+
+                axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`; // what
                 this.$router.push('/');
+
               }
             
           })
