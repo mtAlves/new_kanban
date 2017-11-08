@@ -10,13 +10,13 @@
             <v-layout row>
               <v-flex xs5 class="mr-2">
                 <v-text-field
-                  label="Username" v-model="user.user_name" :rules="emptyField"
+                  label="NOME DE USUÁRIO" v-model="user.user_name" :rules="emptyField"
                   append-icon="account_box" class="blue-grey--text mb-2"> 
                   </v-text-field>
               </v-flex>
               <v-flex xs7>
                 <v-text-field
-                  label="Your name" v-model="user.name" :rules="emptyField"
+                  label="SEU NOME" v-model="user.name" :rules="emptyField"
                   append-icon="fa-id-card" class="blue-grey--text mb-2"> 
                   </v-text-field>
               </v-flex>
@@ -24,7 +24,7 @@
             <v-layout row>
               <v-flex xs12>
                 <v-text-field
-                  label="E-mail" v-model="user.email" :rules="emailRules"
+                  label="E-MAIL" v-model="user.email" :rules="emailRules"
                   append-icon="email" class="blue-grey--text mb-2"> 
                   </v-text-field>
               </v-flex>
@@ -32,7 +32,7 @@
             <v-layout row >
               <v-flex xs6 class="mr-2">
                 <v-text-field
-                  label="Password"
+                  label="SENHA"
                   v-model="user.password"
                   :append-icon="e1 ? 'visibility' : 'visibility_off'"
                   :append-icon-cb="() => (e1 = !e1)"
@@ -43,7 +43,7 @@
               </v-flex>
               <v-flex xs6>
                 <v-text-field
-                  label="Confirm password"
+                  label="CONFIRMAR SENHA"
                   v-model="passwordConfirm"
                   :append-icon="e1 ? 'visibility' : 'visibility_off'"
                   :append-icon-cb="() => (e1 = !e1)"
@@ -57,8 +57,8 @@
           </form>
           <v-dialog v-model="dialog" >
             <v-card class="blue-grey darken-3 text-xs-center">
-              <v-card-title class="headline red--text">Error</v-card-title>
-              <v-card-text class="blue--text">Please, check fields.</v-card-text>
+              <div class="headline text-xs-center red--text pa-2">ERRO</div>
+              <v-card-text class="blue--text">Por favor, verifique se as informações estão corretas.</v-card-text>
             </v-card>
           </v-dialog>
         </v-card-text>
@@ -72,6 +72,7 @@ import axios from 'axios';
 import store from '../core';
 import { Base } from '../config';
 
+const auth = store.state.auth;
 
 export default {
   data () {
@@ -80,11 +81,11 @@ export default {
       dialog: false,
       emptyField: [
         v => {
-            return !!v || 'This field is required'
+            return !!v || 'Este campo é obrigatório'
           }
       ],
       emailRules: [
-        v => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+        v => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail inválido'
       ],
       passwordConfirm: '',
 
@@ -131,7 +132,7 @@ export default {
                 store.commit('setUser', this.user.user_name);
                 store.commit('setToken', response.headers['x-access-token']);
 
-                axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`; // what
+                axios.defaults.headers.common['Authorization'] = `Bearer ${auth.token}`; // what
                 this.$router.push('/');
 
             }

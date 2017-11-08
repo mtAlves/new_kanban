@@ -7,13 +7,17 @@ import mutations from './mutations';
 import actions from './actions';
 import getters from './getters';
 
+import auth from '../auth/store'
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-	plugins: [createPersistedState({ storage: window.sessionStorage })],
+	plugins: [createPersistedState({ key:'kanban_auth', paths: ['auth'], storage: window.localStorage })],
     state,
     mutations,
     actions,
-    getters
+    getters,
+    modules: {
+    	auth
+    }
 });

@@ -13,10 +13,10 @@ import store from '@/core'
 
 Vue.use(Router)
 
-
+const auth = store.state.auth;
 
 function requireAuth (to, from, next) {
-  if (store.state.token == null || store.state.toke == '') {
+  if (auth.token == null || auth.token == '') {
     next({
       path: '/login',
       query: { redirect: to.fullPath }

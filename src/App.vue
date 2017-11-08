@@ -21,6 +21,9 @@
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <div v-if="getUser" class="blue--text">
+         {{getUser.toUpperCase()}}
+      </div>     
       <v-menu offset-x left absolute :nudge-width="100">
         <v-toolbar-title slot="activator">
           <v-btn icon>
@@ -92,7 +95,8 @@ import { mapGetters } from 'vuex'
 
     computed: {
       ...mapGetters ([
-        'getToken'
+        'getToken',
+        'getUser'
 
       ])
 

@@ -1,8 +1,11 @@
 
 export default {
-	
-  user: null,
-  token: null,
-  userInfo: {}
-	
+
+	continuousActivityList: {},
+    impedimentList: {},
+    projectList: {},
+    scrumUserList: {},
+    sprintList: {},
+    taskList: {}
+
 }

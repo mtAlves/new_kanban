@@ -10,7 +10,7 @@
             <v-layout row>
               <v-flex xs12>
                 <v-text-field
-                  placeholder="Username" single-line v-model="user.user_name"
+                  placeholder="Usuário" single-line v-model="user.user_name"
                   append-icon="account_box" class="blue-grey--text mb-2" hide-details> 
                   </v-text-field>
               </v-flex>
@@ -19,7 +19,7 @@
             <v-layout row>
               <v-flex xs12>
                 <v-text-field
-                  placeholder="Password" single-line type="password" v-model="temp_pass"
+                  placeholder="Senha" single-line type="password" v-model="temp_pass"
                   append-icon="vpn_key" class="blue-grey--text mb-5" hide-details @keyup.enter="login"> 
                 </v-text-field>
               </v-flex>
@@ -36,7 +36,9 @@
 import axios from 'axios';
 import store from '../core';
 import { mapActions } from 'vuex'
-import { config, Base } from '../config';
+import { Base } from '../config';
+
+const auth = store.state.auth;
 
 export default {
   data () {
@@ -72,7 +74,7 @@ export default {
                 store.commit('setUser', this.user.user_name);
                 store.commit('setToken', response.headers['x-access-token']);
 
-                axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`; // what
+                axios.defaults.headers.common['Authorization'] = `Bearer ${auth.token}`; // what
                 this.$router.push('/');
 
               }
