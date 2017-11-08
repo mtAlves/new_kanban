@@ -1,12 +1,36 @@
 <template>
-  <div >
+	<v-layout row wrap xs12>
 
-    Task
-  </div>
+		<card
+		tabColor="yellow"
+		name="A FAZER"
+		/>
+
+		<card
+		tabColor="blue"
+		name="FAZENDO"
+		/>
+
+		<card
+		tabColor="green"
+		name="FEITO"
+		/>
+
+		<card
+		tabColor="red"
+		name="PENDENTE"
+		/>
+
+	</v-layout>
 </template>
 
 <script>
+import card from './TaskCard'
+
 export default {
+	components:{
+		card
+	},
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'

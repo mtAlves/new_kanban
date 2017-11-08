@@ -20,16 +20,18 @@
       <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       </v-toolbar-title>
+
       <v-spacer></v-spacer>
-      <div v-if="getUser" class="blue--text">
-         {{getUser.toUpperCase()}}
-      </div>     
+
+      <div v-if="getUser" class="blue--text"> {{getUser.toUpperCase()}} </div>  
+
       <v-menu offset-x left absolute :nudge-width="100">
         <v-toolbar-title slot="activator">
           <v-btn icon>
             <v-icon>account_circle</v-icon>
           </v-btn>
         </v-toolbar-title>
+        
         <v-list>
           <v-list-tile v-if="getToken" @click="logout">
             <v-list-tile-title class="red--text"> Logout </v-list-tile-title>
@@ -48,7 +50,7 @@
 
     <main>
       <v-content>
-        <v-container fill-height>
+        <v-container class="containerFullWidth" fill-height>
           <v-layout justify-center>
             <router-view></router-view>
           </v-layout>
@@ -110,5 +112,7 @@ import { mapGetters } from 'vuex'
 </script>
 
 <style>
-
+  .containerFullWidth {
+    max-width: 100% !important
+  }
 </style>
