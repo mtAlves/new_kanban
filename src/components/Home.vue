@@ -8,15 +8,34 @@
 </template>
 
 <script>
-
+import {mapActions} from 'vuex'
 export default {
   data () {
     return {
       
     }
   },
+
   methods: {
-  	
+    ...mapActions({
+      getProjects:'GETPROJECTS',
+      getContinuous: 'GETCONTINUOUS',
+      getImpediments: 'GETIMPEDIMENTS',
+      getUsers: 'GETUSERS',
+      getSprints: 'GETSPRINTS',
+      getTasks: 'GETTASKS'
+
+    })
+
+  },
+
+  created() {
+  	this.getProjects(),
+    this.getContinuous(),
+    this.getImpediments(),
+    this.getUsers(),
+    this.getSprints(),
+    this.getTasks()
   }
 }
 </script>

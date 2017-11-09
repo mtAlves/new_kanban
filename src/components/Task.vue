@@ -26,6 +26,7 @@
 
 <script>
 import card from './TaskCard'
+import { mapGetters } from 'vuex'
 
 export default {
 	components:{

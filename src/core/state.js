@@ -1,11 +1,11 @@
 
 export default {
 
-	continuousActivityList: {},
-    impedimentList: {},
-    projectList: {},
-    scrumUserList: {},
-    sprintList: {},
-    taskList: {}
+    projectsList: {},
+    continuousList: {},
+    impedimentsList: {},
+    usersList: {},
+    sprintsList: {},
+    tasksList:{}
 
 }
