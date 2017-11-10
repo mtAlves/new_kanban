@@ -66,8 +66,8 @@
 				<v-expansion-panel expand>
 					<v-expansion-panel-content v-for="(continuous, index) in continuousList" :key="index" avatar @click="">
 				  		<div slot="header">
-							<v-btn icon @click.native="editItem(continuous)"><v-icon dark color="green lighten-3">edit</v-icon></v-btn>
-			                <v-btn icon @click.native="removeItem(continuous)"><v-icon dark color="red lighten-2">delete</v-icon></v-btn>	
+							<v-btn icon @click.native="editItem(continuous.id)"><v-icon dark color="green lighten-3">edit</v-icon></v-btn>
+			                <v-btn icon @click.native="removeItem(continuous.id)"><v-icon dark color="red lighten-2">delete</v-icon></v-btn>	
 				  		{{continuous.name}}
 				  		</div>
 				  			<v-card color="blue-grey lighten-1">
@@ -131,6 +131,9 @@ export default {
   	},
   	reverseDate (date) {
   		return date.split('-').reverse().join('/');
+  	},
+  	editItem (id){
+  		this.$router.push({name: 'EditContinuousActivity', params: { id: id }})
   	}
   },
 

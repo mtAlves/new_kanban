@@ -71,10 +71,10 @@ import { mapGetters } from 'vuex'
       drawer: true,
       items: [
         { title: 'Gestão de atividades', icon: 'home',  link: '/', color: 'white' }, 
-        { title: 'Projetos', icon: 'assignment',  link: 'project', color: 'blue' },
-        { title: 'Tarefas', icon: 'fa-tasks',  link: 'task', color: 'red' }, 
-        { title: 'Sprints', icon: 'motorcycle',  link: 'sprint', color: 'yellow' }, 
-        { title: 'Atividades contínuas', icon: 'fa-spinner',  link: 'continuous_activity', color: 'green' }
+        { title: 'Projetos', icon: 'assignment',  link: '/projects', color: 'blue' },
+        { title: 'Tarefas', icon: 'fa-tasks',  link: '/tasks', color: 'red' }, 
+        { title: 'Sprints', icon: 'motorcycle',  link: '/sprints', color: 'yellow' }, 
+        { title: 'Atividades contínuas', icon: 'fa-spinner',  link: '/continuous_activitys', color: 'green' }
       ]
 
     }),

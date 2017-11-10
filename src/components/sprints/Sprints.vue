@@ -66,8 +66,8 @@
 				<v-expansion-panel expand>
 					<v-expansion-panel-content v-for="(sprint, index) in sprintsList" :key="index" avatar @click="">
 				  		<div slot="header">
-							<v-btn icon @click.native="editItem(sprint)"><v-icon dark color="yellow lighten-3">edit</v-icon></v-btn>
-			                <v-btn icon @click.native="removeItem(sprint)"><v-icon dark color="red lighten-2">delete</v-icon></v-btn>	
+							<v-btn icon @click.native="editItem(sprint.id)"><v-icon dark color="yellow lighten-3">edit</v-icon></v-btn>
+			                <v-btn icon @click.native="removeItem(sprint.id)"><v-icon dark color="red lighten-2">delete</v-icon></v-btn>	
 				  		{{sprint.code}}
 				  		</div>
 				  			<v-card color="blue-grey lighten-1">
@@ -136,6 +136,9 @@ export default {
   	},
   	reverseDate (date) {
   		return date.split('-').reverse().join('/');
+  	},
+  	editItem (id){
+  		this.$router.push({name: 'EditSprint', params: { id: id }})
   	}
   },
 

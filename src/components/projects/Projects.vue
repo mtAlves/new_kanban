@@ -66,8 +66,8 @@
 				<v-expansion-panel expand>
 					<v-expansion-panel-content v-for="(project, index) in projects" :key="index" avatar @click="">
 				  		<div slot="header">
-							<v-btn icon @click.native="editItem(project)"><v-icon dark color="blue lighten-3">edit</v-icon></v-btn>
-			                <v-btn icon @click.native="removeItem(project)"><v-icon dark color="red lighten-2">delete</v-icon></v-btn>	
+							<v-btn icon @click.native="editItem(project.id)"><v-icon dark color="blue lighten-3">edit</v-icon></v-btn>
+			                <v-btn icon @click.native="removeItem(project.id)"><v-icon dark color="red lighten-2">delete</v-icon></v-btn>	
 				  		{{project.name}}
 				  		</div>
 				  			<v-card color="blue-grey lighten-1">
@@ -113,6 +113,7 @@
 <script>
 import axios from 'axios';
 import store from '@/core';
+import { mapActions } from 'vuex';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -123,6 +124,11 @@ export default {
   },
 
   methods:{
+
+  	...mapActions({
+      getProjects:'GETPROJECTS',
+    }),
+
   	nameById (url) {
   		let nome = '';
   		let id = url.split('/').reverse()[1];
@@ -131,19 +137,22 @@ export default {
   	},
   	reverseDate (date) {
   		return date.split('-').reverse().join('/');
+  	},
+  	editItem (id){
+  		this.$router.push({name: 'EditProject', params: { id: id }})
   	}
   },
 
   computed: {
 	...mapGetters({
 		projects: 'getProjectsList',
-		usersList: 'getUsersList'
+		usersList: 'getUsersList',
 	})
 
   },
 
   created(){
-
+  	this.getProjects();
   }
 }
 </script>

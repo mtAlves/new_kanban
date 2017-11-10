@@ -1,13 +1,17 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import ContinuousActivity from '@/components/ContinuousActivity';
-import Home from '@/components/Home';
-import Login from '@/components/Login';
-import Register from '@/components/Register';
-import Project from '@/components/Project';
-import Sprint from '@/components/Sprint';
-import Task from '@/components/Task';
+import Home from '#/Home';
+import Login from '#/Login';
+import Register from '#/Register';
+
+import ContinuousActivitys from 'CONTINUOUS/ContinuousActivitys';
+import EditContinuousActivity from 'CONTINUOUS/EditContinuousActivity';
+import Projects from 'PROJECTS/Projects';
+import EditProject from 'PROJECTS/EditProject';
+import Sprints from 'SPRINTS/Sprints';
+import EditSprint from 'SPRINTS/EditSprint';
+import Tasks from 'TASKS/Tasks';
 
 import store from '@/core'
 
@@ -52,27 +56,44 @@ export default new Router({
         }
     },
     {
-	    path: '/continuous_activity',
-      name: ContinuousActivity,
-	    component: ContinuousActivity,
+	    path: '/continuous_activitys',
+      name: ContinuousActivitys,
+	    component: ContinuousActivitys,
       beforeEnter: requireAuth
     },
     {
-      path: '/project',
-      name: 'Project',
-      component: Project,
+      path: '/edit_continuous_activity/:id/',
+      name: 'EditContinuousActivity',
+      component: EditContinuousActivity,
       beforeEnter: requireAuth
     },
     {
-      path: '/sprint',
-      name: 'Sprint',
-      component: Sprint,
+      path: '/projects',
+      name: 'Projects',
+      component: Projects,
       beforeEnter: requireAuth
     },
     {
-      path: '/task',
-      name: 'Task',
-      component: Task,
+      path: '/edit_project/:id/',
+      name: 'EditProject',
+      component: EditProject,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/sprints',
+      name: 'Sprints',
+      component: Sprints,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/edit_sprint/:id/',
+      name: 'EditSprint',
+      component: EditSprint,
+      beforeEnter: requireAuth
+    },    {
+      path: '/tasks',
+      name: 'Tasks',
+      component: Tasks,
       beforeEnter: requireAuth
     },    
     {
