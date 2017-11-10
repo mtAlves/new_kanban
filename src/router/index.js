@@ -4,16 +4,23 @@ import Router from 'vue-router';
 import Home from '#/Home';
 import Login from '#/Login';
 import Register from '#/Register';
+import Remove from '#/Remove';
 
 import ContinuousActivitys from 'CONTINUOUS/ContinuousActivitys';
+import AddContinuousActivity from 'CONTINUOUS/AddContinuousActivity';
 import EditContinuousActivity from 'CONTINUOUS/EditContinuousActivity';
+
 import Projects from 'PROJECTS/Projects';
+import AddProject from 'PROJECTS/AddProject'
 import EditProject from 'PROJECTS/EditProject';
+
 import Sprints from 'SPRINTS/Sprints';
+import AddSprint from 'SPRINTS/AddSprint';
 import EditSprint from 'SPRINTS/EditSprint';
+
 import Tasks from 'TASKS/Tasks';
 
-import store from '@/core'
+import store from '@/core';
 
 Vue.use(Router)
 
@@ -56,6 +63,12 @@ export default new Router({
         }
     },
     {
+      path: '/remove',
+      name: 'Remove',
+      component: Remove,
+      beforeEnter: requireAuth
+    },
+    {
 	    path: '/continuous_activitys',
       name: ContinuousActivitys,
 	    component: ContinuousActivitys,
@@ -74,6 +87,12 @@ export default new Router({
       beforeEnter: requireAuth
     },
     {
+      path: '/add_project',
+      name: 'AddProject',
+      component: AddProject,
+      beforeEnter: requireAuth
+    },
+    {
       path: '/edit_project/:id/',
       name: 'EditProject',
       component: EditProject,
@@ -85,6 +104,12 @@ export default new Router({
       component: Sprints,
       beforeEnter: requireAuth
     },
+    {
+      path: '/add_sprint',
+      name: 'AddSprint',
+      component: AddSprint,
+      beforeEnter: requireAuth
+    }, 
     {
       path: '/edit_sprint/:id/',
       name: 'EditSprint',

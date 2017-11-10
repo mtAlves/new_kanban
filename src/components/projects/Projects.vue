@@ -3,63 +3,9 @@
 		<v-flex xs12 sm10 offset-sm1 >
 			<v-card>
 		        <v-toolbar class="blue-grey darken-3" dark>
-					<!-- add method -->	
-					<v-dialog v-model="addButton" persistent max-width="500px"> 
-				      <v-btn icon dark slot="activator"> <v-icon color="blue">add</v-icon></v-btn>
-				      <v-card>
-				        <v-card-title>
-				          <span class="headline">Adicionar Projeto</span>
-				        </v-card-title>
-				        <v-card-text>
-				          <v-container grid-list-md>
-				            <v-layout wrap>
-				              <v-flex xs12 sm6 md4>
-				                <v-text-field label="Legal first name" required></v-text-field>
-				              </v-flex>
-				              <v-flex xs12 sm6 md4>
-				                <v-text-field label="Legal middle name" hint="example of helper text only on focus"></v-text-field>
-				              </v-flex>
-				              <v-flex xs12 sm6 md4>
-				                <v-text-field label="Legal last name" hint="example of persistent helper text"
-				                  persistent-hint
-				                  required
-				                ></v-text-field>
-				              </v-flex>
-				              <v-flex xs12>
-				                <v-text-field label="Email" required></v-text-field>
-				              </v-flex>
-				              <v-flex xs12>
-				                <v-text-field label="Password" type="password" required></v-text-field>
-				              </v-flex>
-				              <v-flex xs12 sm6>
-				                <v-select
-				                  label="Age"
-				                  required
-				                  :items="['0-17', '18-29', '30-54', '54+']"
-				                ></v-select>
-				              </v-flex>
-				              <v-flex xs12 sm6>
-				                <v-select
-				                  label="Interests"
-				                  multiple
-				                  autocomplete
-				                  chips
-				                  :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-				                ></v-select>
-				              </v-flex>
-				            </v-layout>
-				          </v-container>
-				          <small>*indicates required field</small>
-				        </v-card-text>
-				        <v-card-actions>
-				          <v-spacer></v-spacer>
-				          <v-btn color="red darken-1" flat @click.native="addButton = false">Cancelar</v-btn>
-				          <v-btn color="blue darken-1" flat @click.native="">Adicionar</v-btn>
-				        </v-card-actions>
-				      </v-card>
-				    </v-dialog>
-				    <!-- ending add method -->
-
+				      <v-btn icon dark @click.native="addProject"> 
+				      	<v-icon color="blue">add</v-icon>
+				      </v-btn>
 		          <v-spacer></v-spacer>
 		          <v-text-field label="Pesquisar..."  class="blue--text mt-3" single-line  append-icon="search"  dark ></v-text-field>
 		        </v-toolbar>
@@ -67,22 +13,22 @@
 					<v-expansion-panel-content v-for="(project, index) in projects" :key="index" avatar @click="">
 				  		<div slot="header">
 							<v-btn icon @click.native="editItem(project.id)"><v-icon dark color="blue lighten-3">edit</v-icon></v-btn>
-			                <v-btn icon @click.native="removeItem(project.id)"><v-icon dark color="red lighten-2">delete</v-icon></v-btn>	
+			                <v-btn icon @click.native="removeItem(project)"><v-icon dark color="red lighten-2">delete</v-icon></v-btn>	
 				  		{{project.name}}
 				  		</div>
 				  			<v-card color="blue-grey lighten-1">
 								 <v-container grid-list-md>
 							        <v-layout row wrap>
 							          <v-flex xs6>
-							            <v-text-field v-if="project.administrative_responsible" class="input-group--focused" disabled box dark label="Responsável Administrativo" :value="nameById(project.administrative_responsible)"></v-text-field>
+							            <v-text-field v-if="project.administrative_responsible" class="input-group--focused" disabled box dark label="Responsável Administrativo" :value="nameById(project.administrative_responsible, usersList)"></v-text-field>
 							            <v-text-field v-else class="input-group--focused" disabled box dark label="Responsável Administrativo" value="Não informado"></v-text-field>
 							          </v-flex>
 							          <v-flex xs6>
-							            <v-text-field v-if="project.technical_responsible" class="input-group--focused" disabled box dark label="Responsável Técnico" :value="nameById(project.technical_responsible)"></v-text-field>
+							            <v-text-field v-if="project.technical_responsible" class="input-group--focused" disabled box dark label="Responsável Técnico" :value="nameById(project.technical_responsible, usersList)"></v-text-field>
 										<v-text-field v-else class="input-group--focused" disabled box dark label="Responsável Técnico" value="Não informado"></v-text-field>
 							          </v-flex>
 							          <v-flex xs12 sm5 offset-sm1>
-						                <v-text-field class="input-group--focused"
+						                <v-text-field v-if="project.start" class="input-group--focused"
 						                  single-line :value="reverseDate(project.start)"
 						                  append-icon="event" disabled> 
 						                </v-text-field>
@@ -97,6 +43,59 @@
 						                  append-icon="event_busy" disabled> 
 						                </v-text-field>
 						              </v-flex>
+
+						              <v-flex xs12 sm5 offset-sm1>
+						                <v-list class="blue-grey lighten-1 ml-1">
+						                  <v-list-group class="red">
+						                    <v-list-tile slot="item" @click="">
+						                      <v-list-tile-action>
+						                        <v-icon>fa-tasks</v-icon>
+						                      </v-list-tile-action>
+						                      <v-list-tile-content>
+						                        <v-list-tile-title>Tarefas</v-list-tile-title>
+						                      </v-list-tile-content>
+						                      <v-list-tile-action>
+						                        <v-icon color="blue-grey darken-4">keyboard_arrow_down</v-icon>
+						                      </v-list-tile-action>
+						                    </v-list-tile>
+						                    <v-list-tile v-for="task in project.tasks" @click="" class="blue-grey darken-2">
+						                      <v-list-tile-content>
+						                      		<v-tooltip top>
+						                        	<v-list-tile-title slot="activator">{{nameById(task, tasksList)}}</v-list-tile-title>      
+						                        	<span>{{nameById(task, tasksList)}}</span>
+    																	</v-tooltip>
+						                      </v-list-tile-content>
+						                    </v-list-tile>
+						                  </v-list-group>
+						                </v-list>
+						              </v-flex>
+
+						              <v-flex xs12 sm5>
+						                <v-list class="blue-grey lighten-1 ml-1">
+						                  <v-list-group class="yellow darken-3">
+						                    <v-list-tile slot="item" @click="">
+						                      <v-list-tile-action>
+						                        <v-icon>motorcycle</v-icon>
+						                      </v-list-tile-action>
+						                      <v-list-tile-content>
+						                        <v-list-tile-title>Sprints</v-list-tile-title>
+						                      </v-list-tile-content>
+						                      <v-list-tile-action>
+						                        <v-icon color="blue-grey darken-4">keyboard_arrow_down</v-icon>
+						                      </v-list-tile-action>
+						                    </v-list-tile>
+						                    <v-list-tile v-for="sprint in project.sprints" @click="" class="blue-grey darken-2">
+						                      <v-list-tile-content>
+					                      		<v-tooltip top>
+					                        	<v-list-tile-title slot="activator">{{nameById(sprint, sprintsList, 'code')}}</v-list-tile-title>      
+					                        	<span>{{nameById(sprint, sprintsList, 'code')}}</span>
+  																	</v-tooltip>
+						                      </v-list-tile-content>
+						                    </v-list-tile>
+						                  </v-list-group>
+						                </v-list>
+						              </v-flex>
+
 							          <v-flex xs12>
 							            <v-text-field box class="input-group--focused" multi-line label="Descrição" disabled v-model="project.description"></v-text-field>
 							          </v-flex>
@@ -119,7 +118,14 @@ import { mapGetters } from 'vuex';
 export default {
   data () {
     return {
-     addButton: false
+    	projectsUrl: 'project-list/',
+     	addButton: false,
+      items: [
+          {
+            items: [
+              { title: 'List Item' }
+            ]
+          }]
     }
   },
 
@@ -129,17 +135,31 @@ export default {
       getProjects:'GETPROJECTS',
     }),
 
-  	nameById (url) {
-  		let nome = '';
-  		let id = url.split('/').reverse()[1];
-  		this.usersList.map( user => user.id == id ? nome = user.name : null);
-  		return nome;
+  	addProject () {
+  		this.$router.push('/add_project')
   	},
+  	nameById (url, list, getter = "name") {
+  		let name = '';
+  		let id = url.split('/').reverse()[1];
+  		list.map( user => user.id == id ? name = user[getter] : null);
+  		return name;
+  	},
+
   	reverseDate (date) {
   		return date.split('-').reverse().join('/');
   	},
+  	
   	editItem (id){
   		this.$router.push({name: 'EditProject', params: { id: id }})
+  	},
+
+  	removeItem (project){
+  		axios.delete(`${this.projectsUrl}${project.id}/`).then( res => 
+  			this.$router.push({name:'Remove', params: {name: project.name}})
+        )
+        .catch(error => {
+          console.log(error);
+        });
   	}
   },
 
@@ -147,6 +167,8 @@ export default {
 	...mapGetters({
 		projects: 'getProjectsList',
 		usersList: 'getUsersList',
+		tasksList: 'getTasksList',
+		sprintsList: 'getSprintsList'
 	})
 
   },
