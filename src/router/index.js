@@ -81,6 +81,12 @@ export default new Router({
       beforeEnter: requireAuth
     },
     {
+      path: '/add_continuous_activity',
+      name: 'AddContinuousActivity',
+      component: AddContinuousActivity,
+      beforeEnter: requireAuth
+    },
+    {
       path: '/projects',
       name: 'Projects',
       component: Projects,

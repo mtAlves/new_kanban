@@ -121,8 +121,7 @@ import { mapActions, mapGetters } from 'vuex';
 export default {
   data () {
     return {
-    	projectsUrl: 'project-list/',
-     	addButton: false
+    	projectsUrl: 'project-list/'
     }
   },
 

@@ -51,7 +51,7 @@
 							                  append-icon="event_available" disabled> 
 							                </v-text-field>
 							                <v-text-field v-else
-							                  single-line :value="sprint.end"
+							                  single-line value="Data final não informada"
 							                  append-icon="event_busy" disabled> 
 							                </v-text-field>
 							              </v-flex>
@@ -73,8 +73,7 @@ import { mapActions, mapGetters } from 'vuex';
 export default {
   data () {
     return {
-    	sprintsUrl: 'sprint-list/',
-    	addButton: false
+    	sprintsUrl: 'sprint-list/'
     }
   },
 
