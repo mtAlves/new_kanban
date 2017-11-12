@@ -3,63 +3,9 @@
 		<v-flex xs12 sm10 offset-sm1 >
 			<v-card>
 		        <v-toolbar class="blue-grey darken-3" dark>
-					<!-- add method -->	
-					<v-dialog v-model="addButton" persistent max-width="500px"> 
-				      <v-btn icon dark slot="activator"> <v-icon color="yellow">add</v-icon></v-btn>
-				      <v-card>
-				        <v-card-title>
-				          <span class="headline">Adicionar Sprint</span>
-				        </v-card-title>
-				        <v-card-text>
-				          <v-container grid-list-md>
-				            <v-layout wrap>
-				              <v-flex xs12 sm6 md4>
-				                <v-text-field label="Legal first name" required></v-text-field>
-				              </v-flex>
-				              <v-flex xs12 sm6 md4>
-				                <v-text-field label="Legal middle name" hint="example of helper text only on focus"></v-text-field>
-				              </v-flex>
-				              <v-flex xs12 sm6 md4>
-				                <v-text-field label="Legal last name" hint="example of persistent helper text"
-				                  persistent-hint
-				                  required
-				                ></v-text-field>
-				              </v-flex>
-				              <v-flex xs12>
-				                <v-text-field label="Email" required></v-text-field>
-				              </v-flex>
-				              <v-flex xs12>
-				                <v-text-field label="Password" type="password" required></v-text-field>
-				              </v-flex>
-				              <v-flex xs12 sm6>
-				                <v-select
-				                  label="Age"
-				                  required
-				                  :items="['0-17', '18-29', '30-54', '54+']"
-				                ></v-select>
-				              </v-flex>
-				              <v-flex xs12 sm6>
-				                <v-select
-				                  label="Interests"
-				                  multiple
-				                  autocomplete
-				                  chips
-				                  :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-				                ></v-select>
-				              </v-flex>
-				            </v-layout>
-				          </v-container>
-				          <small>*indicates required field</small>
-				        </v-card-text>
-				        <v-card-actions>
-				          <v-spacer></v-spacer>
-				          <v-btn color="red darken-1" flat @click.native="addButton = false">Cancelar</v-btn>
-				          <v-btn color="blue darken-1" flat @click.native="">Adicionar</v-btn>
-				        </v-card-actions>
-				      </v-card>
-				    </v-dialog>
-				    <!-- ending add method -->
-
+			      <v-btn icon dark @click.native="addSprint"> 
+			      	<v-icon color="yellow">add</v-icon>
+			      </v-btn>
 		          <v-spacer></v-spacer>
 		          <v-text-field label="Pesquisar..."  class="yellow--text mt-3" single-line  append-icon="search"  dark ></v-text-field>
 		        </v-toolbar>
@@ -67,7 +13,7 @@
 					<v-expansion-panel-content v-for="(sprint, index) in sprintsList" :key="index" avatar @click="">
 				  		<div slot="header">
 							<v-btn icon @click.native="editItem(sprint.id)"><v-icon dark color="yellow lighten-3">edit</v-icon></v-btn>
-			                <v-btn icon @click.native="removeItem(sprint.id)"><v-icon dark color="red lighten-2">delete</v-icon></v-btn>	
+			                <v-btn icon @click.native="removeItem(sprint)"><v-icon dark color="red lighten-2">delete</v-icon></v-btn>	
 				  		{{sprint.code}}
 				  		</div>
 				  			<v-card color="blue-grey lighten-1">
@@ -94,6 +40,10 @@
 							                  single-line :value="reverseDate(sprint.start)"
 							                  append-icon="event" disabled> 
 							                </v-text-field>
+							                <v-text-field v-else class="input-group--focused"
+							                  single-line value="Data de inicio não informada"
+							                  append-icon="event" disabled> 
+							                </v-text-field>
 							              </v-flex>
 							              <v-flex xs12 sm5>
 							                <v-text-field v-if="sprint.end"
@@ -118,27 +68,49 @@
 <script>
 import axios from 'axios';
 import store from '@/core';
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   data () {
     return {
-     addButton: false
+    	sprintsUrl: 'sprint-list/',
+    	addButton: false
     }
   },
 
   methods:{
+    ...mapActions({
+      getSprints: 'GETSPRINTS'
+
+    }),
+
   	nameById (url, list) {
   		let nome = '';
   		let id = url.split('/').reverse()[1];
   		list.map( user => user.id == id ? nome = user.name : null);
   		return nome;
   	},
+
   	reverseDate (date) {
   		return date.split('-').reverse().join('/');
   	},
+
   	editItem (id){
   		this.$router.push({name: 'EditSprint', params: { id: id }})
+  	},
+
+  	addSprint () {
+  		this.$router.push('/add_sprint')
+  	},
+
+  	removeItem (sprint){
+  		axios.delete(`${this.sprintsUrl}${sprint.id}/`).then( res => {
+  			this.getSprints();
+  			this.$router.push({name:'Remove', params: {name: sprint.code}})
+        })
+        .catch(error => {
+          console.log(error);
+        });
   	}
   },
 

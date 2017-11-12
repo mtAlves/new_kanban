@@ -2,8 +2,8 @@
   <v-layout>
     <v-flex xs12 sm8 offset-sm2>
       <v-card class="blue-grey darken-3 elevation-4">
-        <v-card-title class="blue black--text">
-          {{project.name.toUpperCase()}}
+        <v-card-title class=" headline yellow black--text">
+          Novo sprint
           <v-spacer></v-spacer>
           <v-btn floating small class="red lighten-2" @click.native="cancel()">
             <v-icon light>cancel</v-icon>
@@ -17,82 +17,32 @@
             <v-layout row wrap>
 
               <v-flex xs12>
-                <v-select class="input-group--focused" label="Responsável Administrativo" autocomplete v-model="project.administrative_responsible" :items="usersList" item-text="name"></v-select>
+                <v-text-field class="input-group--focused" label="código" v-model="sprint.code" required></v-text-field>
               </v-flex>
-  
+
               <v-flex xs12>
-                <v-select class="input-group--focused" label="Responsável Técnico" autocomplete v-model="project.technical_responsible" :items="usersList" item-text="name"></v-select>
+                <v-select class="input-group--focused" label="Responsável" autocomplete v-model="sprint.responsible" :items="usersList" item-text="name" @blur="responsibleId"></v-select>
+              </v-flex>
+
+              <v-flex xs12>
+                <v-select class="input-group--focused" label="Projeto" autocomplete v-model="sprint.project" :items="projectsList" item-text="name" @blur="projectId"></v-select>
               </v-flex>
 
               <v-flex xs12 sm5 offset-sm1>
                 <v-menu lazy  :close-on-content-click="true"  v-model="menu_start"  transition="scale-transition" offset-y full-width  :nudge-left="40" max-width="290px">
-                  <v-text-field slot="activator" label="Data final" v-model="project.start" prepend-icon="event" readonly ></v-text-field>
-                  <v-date-picker locale="pt-BR" v-model="project.start" no-title scrollable actions></v-date-picker>
+                  <v-text-field slot="activator" label="Data inicio" v-model="sprint.start" prepend-icon="event" readonly required ></v-text-field>
+                  <v-date-picker locale="pt-BR" v-model="sprint.start" no-title scrollable actions></v-date-picker>
                 </v-menu>
               </v-flex>
 
               <v-flex xs12 sm5>
                 <v-menu lazy  :close-on-content-click="true"  v-model="menu_end"  transition="scale-transition" offset-y full-width  :nudge-left="40" max-width="290px">
-                  <v-text-field slot="activator" label="Data final" v-model="project.end" prepend-icon="event" readonly ></v-text-field>
-                  <v-date-picker locale="pt-BR" v-model="project.end" no-title scrollable actions></v-date-picker>
+                  <v-text-field slot="activator" label="Data final" v-model="sprint.end" prepend-icon="event" readonly></v-text-field>
+                  <v-date-picker locale="pt-BR" v-model="sprint.end" no-title scrollable actions></v-date-picker>
                 </v-menu>
               </v-flex>
 
-              <v-flex xs12 sm5 offset-sm1>
-                <v-list class="blue-grey darken-3 mr-1">
-                  <v-list-group class="red" v-for="item in items" :value="item.active" v-bind:key="item.title">
-                    <v-list-tile slot="item" @click="">
-                      <v-list-tile-action>
-                        <v-icon>fa-tasks</v-icon>
-                      </v-list-tile-action>
-                      <v-list-tile-content>
-                        <v-list-tile-title>Tarefas</v-list-tile-title>
-                      </v-list-tile-content>
-                      <v-list-tile-action>
-                        <v-icon color="blue-grey darken-4">keyboard_arrow_down</v-icon>
-                      </v-list-tile-action>
-                    </v-list-tile>
-                    <v-list-tile v-for="subItem in item.items" v-bind:key="subItem.title" @click="" class="blue-grey darken-2">
-                      <v-list-tile-content>
-                        <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
-                      </v-list-tile-content>
-                      <v-list-tile-action>
-                        <v-icon>{{ subItem.action }}</v-icon>
-                      </v-list-tile-action>
-                    </v-list-tile>
-                  </v-list-group>
-                </v-list>
-              </v-flex>
 
-              <v-flex xs12 sm5>
-                <v-list class="blue-grey darken-3 ml-1">
-                  <v-list-group class="yellow darken-3" v-for="item in items" :value="item.active" v-bind:key="item.title">
-                    <v-list-tile slot="item" @click="">
-                      <v-list-tile-action>
-                        <v-icon>motorcycle</v-icon>
-                      </v-list-tile-action>
-                      <v-list-tile-content>
-                        <v-list-tile-title>Sprints</v-list-tile-title>
-                      </v-list-tile-content>
-                      <v-list-tile-action>
-                        <v-icon color="blue-grey darken-4">keyboard_arrow_down</v-icon>
-                      </v-list-tile-action>
-                    </v-list-tile>
-                    <v-list-tile v-for="subItem in item.items" v-bind:key="subItem.title" @click="" class="blue-grey darken-2">
-                      <v-list-tile-content>
-                        <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
-                      </v-list-tile-content>
-                      <v-list-tile-action>
-                        <v-icon>{{ subItem.action }}</v-icon>
-                      </v-list-tile-action>
-                    </v-list-tile>
-                  </v-list-group>
-                </v-list>
-              </v-flex>
-
-              <v-flex xs12>
-                  <v-text-field box class="input-group--focused" multi-line label="Descrição" v-model="project.description"></v-text-field>
-              </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
@@ -104,66 +54,76 @@
 <script>
 import axios from 'axios';
 import store from '@/core';
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   data () {
     return {
-      project: {
-        administrative_responsible:null,
-        description:"",
-        end:"",
-        id:null,
-        name:"",
-        sprints:[],
-        start:"",
-        tasks:[],
-        technical_responsible:""
+      sprintsUrl: 'sprint-list/',
+      projectsUrl: 'project-list/',
+      usersUrl: 'user-list/',
+      sprint: {
+        code: "",
+        start: null,
+        end: null,
+        id: null,
+        impediments: [],
+        project: null,
+        responsible: null,
+        tasks: []
+      },
+      temp: {
+        responsible:'',
+        project:''
       },
       menu_start: false,
-      menu_end: false,
-      items: [
-          {
-            items: [
-              { title: 'List Item' }
-            ]
-          }]
+      menu_end: false
     }
   },
 
   methods:{
+    ...mapActions({
+      getSprints: 'GETSPRINTS'
 
-  	cancel(){
-      this.$router.push('/projects')
+    }),
+
+    responsibleId () {
+      this.temp.responsible = `${axios.defaults.baseURL}${this.usersUrl}${this.sprint.responsible.id}/`;
     },
 
-    save(){
-      console.log(this.project)
+    projectId () {
+      this.temp.project = `${axios.defaults.baseURL}${this.projectsUrl}${this.sprint.project.id}/`;
     },
 
-    getProject(){
-      let project = this.projectsList.find( project => project.id == this.$route.params.id);
-      console.log(project);
-      this.project = project;
+    cancel (){
+      this.$router.push('/sprints')
+    },
+
+    save (){
+      this.sprint.responsible = this.temp.responsible;
+      this.sprint.project = this.temp.project;
+      console.log(this.sprint);
+      axios.post(this.sprintsUrl, this.sprint).then(res =>{
+        this.getSprints();
+        this.$router.push('/sprints')
+     });
     }
 
   },
 
   computed:{
-  	...mapGetters({
-  		projectsList:'getProjectsList',
-  		usersList: 'getUsersList'
-  	})
-  },
-
-  created(){
-    this.getProject()
+    ...mapGetters({
+      usersList: 'getUsersList',
+      projectsList: 'getProjectsList'
+    })
   }
 }
 
 </script>
 
-<style>
-	
+<style scoped>
+.input-group--focused{
+  color:yellow !important;
+}
 
 </style>

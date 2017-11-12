@@ -56,7 +56,7 @@
 <script>
 import axios from 'axios';
 import store from '@/core';
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   data () {
@@ -84,7 +84,11 @@ export default {
   },
 
   methods:{
-    teste(){console.log('testando Blur')},
+
+    ...mapActions({
+      getProjects: 'GETPROJECTS'
+
+    }),
 
     administrativeId () {
       this.temp.adm = `${axios.defaults.baseURL}${this.usersUrl}${this.project.administrative_responsible.id}/`;
@@ -102,7 +106,10 @@ export default {
       this.project.administrative_responsible = this.temp.adm;
       this.project.technical_responsible = this.temp.tech;
 
-      axios.post(this.projectsUrl, this.project).then(res => this.$router.push('/projects'));
+      axios.post(this.projectsUrl, this.project).then(res => {
+        this.getProjects();
+        this.$router.push('/projects')
+     });
     }
 
   },

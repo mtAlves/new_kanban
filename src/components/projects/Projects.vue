@@ -32,6 +32,10 @@
 						                  single-line :value="reverseDate(project.start)"
 						                  append-icon="event" disabled> 
 						                </v-text-field>
+							              <v-text-field v-else class="input-group--focused"
+							                single-line value="Data de inicio não informada"
+							                append-icon="event" disabled> 
+							              </v-text-field>
 						              </v-flex>
 						              <v-flex xs12 sm5>
 						                <v-text-field v-if="project.end"
@@ -39,7 +43,7 @@
 						                  append-icon="event_available" disabled> 
 						                </v-text-field>
 						                <v-text-field v-else
-						                  single-line :value="project.ended"
+						                  single-line value="Data final não informada"
 						                  append-icon="event_busy" disabled> 
 						                </v-text-field>
 						              </v-flex>
@@ -112,20 +116,13 @@
 <script>
 import axios from 'axios';
 import store from '@/core';
-import { mapActions } from 'vuex';
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   data () {
     return {
     	projectsUrl: 'project-list/',
-     	addButton: false,
-      items: [
-          {
-            items: [
-              { title: 'List Item' }
-            ]
-          }]
+     	addButton: false
     }
   },
 
@@ -154,9 +151,10 @@ export default {
   	},
 
   	removeItem (project){
-  		axios.delete(`${this.projectsUrl}${project.id}/`).then( res => 
+  		axios.delete(`${this.projectsUrl}${project.id}/`).then( res =>{
+  			this.getProjects();
   			this.$router.push({name:'Remove', params: {name: project.name}})
-        )
+        })
         .catch(error => {
           console.log(error);
         });

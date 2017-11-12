@@ -62,7 +62,7 @@
 <script>
 import axios from 'axios';
 import store from '@/core';
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   data () {
@@ -90,6 +90,12 @@ export default {
   },
 
   methods:{
+    
+    ...mapActions({
+      getProjects: 'GETPROJECTS'
+
+    }),
+
     administrativeId () {
       this.temp.adm = `${axios.defaults.baseURL}${this.usersUrl}${this.project.administrative_responsible.id}/`;
     },
@@ -116,8 +122,11 @@ export default {
         this.project.technical_responsible = this.temp.tech;
       
       };
-      let url = `${this.projectsUrl}${this.project.id}/`
-      axios.put(url, this.project).then(res => this.$router.push('/projects'));
+      let url = `${this.projectsUrl}${this.project.id}/`;
+      axios.put(url, this.project).then(res =>{
+        this.getProjects();
+        this.$router.push('/projects')
+      });
 
     },
 
