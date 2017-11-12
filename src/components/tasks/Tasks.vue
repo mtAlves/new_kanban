@@ -1,24 +1,32 @@
 <template>
 	<v-layout row wrap xs12>
-
+<!-- 		<v-btn @click.native="teste">teste</v-btn> -->
 		<card
-		tabColor="yellow"
+		tabColor="yellow darken-2"
 		name="A FAZER"
+		cardColor="yellow lighten-2"
+		:tasks="todo"
 		/>
 
 		<card
 		tabColor="blue"
 		name="FAZENDO"
+		cardColor="blue lighten-2"
+		:tasks="doing"
 		/>
 
 		<card
 		tabColor="green"
 		name="FEITO"
+		cardColor="green lighten-2"
+		:tasks="done"
 		/>
 
 		<card
 		tabColor="red"
 		name="PENDENTE"
+		cardColor="red lighten-2"
+		:tasks="pending"
 		/>
 
 	</v-layout>
@@ -26,16 +34,58 @@
 
 <script>
 import card from './TaskCard'
-import { mapGetters } from 'vuex'
+import draggable from 'vuedraggable'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
 	components:{
-		card
+		card, draggable
 	},
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+    	todo: [],
+    	doing: [],
+    	done: [],
+    	pending: []
     }
+  },
+  methods: {
+  	teste() {console.log(this.todo, this.doing,this.done,this.pending)},
+  	...mapActions({
+  		getTasks: 'GETTASKS'
+  	}),
+
+  	getTodo(){  
+  		setTimeout(()=>{
+  		  this.getTasksList.map(task => task.status == 1 ? this.todo.push(task) : null)	
+  		}, 200)
+  	},
+  	getDoing(){  
+  		setTimeout(()=>{
+  		  this.getTasksList.map(task => task.status == 2 ? this.doing.push(task) : null)	
+  		}, 200)
+  	},
+  	getDone(){  
+  		setTimeout(()=>{
+  		  this.getTasksList.map(task => task.status == 4 ? this.done.push(task) : null)	
+  		}, 200)
+  	},
+  	getPending(){  
+  		setTimeout(()=>{
+  		  this.getTasksList.map(task => task.status == 3 ? this.pending.push(task) : null)	
+  		}, 200)
+  	},
+  },
+
+  computed: {
+  	...mapGetters([
+  		'getTasksList'
+  	])
+  },
+
+  created(){
+  	this.getTasks(),
+  	this.getTodo(), this.getDoing(), this.getDone(), this.getPending()
   }
 }
 </script>
