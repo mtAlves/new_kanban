@@ -19,6 +19,8 @@ import AddSprint from 'SPRINTS/AddSprint';
 import EditSprint from 'SPRINTS/EditSprint';
 
 import Tasks from 'TASKS/Tasks';
+import AddTask from 'TASKS/AddTask';
+import EditTask from 'TASKS/EditTask';
 
 import store from '@/core';
 
@@ -121,12 +123,25 @@ export default new Router({
       name: 'EditSprint',
       component: EditSprint,
       beforeEnter: requireAuth
-    },    {
+    },
+    {
       path: '/tasks',
       name: 'Tasks',
       component: Tasks,
       beforeEnter: requireAuth
-    },    
+    },
+    {
+      path: '/add_task',
+      name: 'AddTask',
+      component: AddTask,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/edit_task/:id/',
+      name: 'EditTask',
+      component: EditTask,
+      beforeEnter: requireAuth
+    },     
     {
       path: '*',
       redirect: '/',

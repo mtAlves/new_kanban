@@ -2,7 +2,7 @@
   <v-layout>
     <v-flex xs12 sm8 offset-sm2>
       <v-card class="blue-grey darken-3 elevation-4">
-        <v-card-title class="blue black--text">
+        <v-card-title class="yellow black--text">
           {{sprint.code.toUpperCase()}}
           <v-spacer></v-spacer>
           <v-btn floating small class="red lighten-2" @click.native="cancel">
@@ -16,8 +16,12 @@
           <v-container fluid>
             <v-layout row wrap>
 
+              <v-flex xs10 offset-xs1>
+                <v-text-field class="input-group--focused" dark label="Codigo do sprint" v-model="sprint.code"></v-text-field>
+              </v-flex>
+
               <v-flex xs12 sm5 offset-sm1 class="mr-1">
-              <v-text-field v-if="sprint.project" class="input-group--focused" disabled dark label="Projeto Atual" :value="nameById(sprint.project, this.projectsList)"></v-text-field>
+              <v-text-field v-if="sprint.project" class="input-group--focused" disabled dark label="Projeto Atual" :value="getName(sprint.project, this.projectsList)"></v-text-field>
               <v-text-field v-else class="input-group--focused" disabled dark label="Responsável Administrativo Atual" value="Não informado"></v-text-field>
               </v-flex>
 
@@ -26,12 +30,12 @@
               </v-flex>
 
               <v-flex xs12 sm5 offset-sm1 class="mr-1">
-              <v-text-field v-if="sprint.responsible" class="input-group--focused" disabled dark label="Responsável Atual" :value="nameById(sprint.responsible, this.usersList)"></v-text-field>
+              <v-text-field v-if="sprint.responsible" class="input-group--focused" disabled dark label="Responsável Atual" :value="getName(sprint.responsible, this.usersList)"></v-text-field>
               <v-text-field v-else class="input-group--focused" disabled dark label="Responsável Atual" value="Não informado"></v-text-field>
               </v-flex>
 
               <v-flex xs12 sm5>
-                <v-select class="input-group--focused" label="Novo Responsável Técnico" autocomplete v-model="sprint.responsible" :items="usersList" item-text="name"></v-select>
+                <v-select class="input-group--focused" label="Novo Responsável" autocomplete v-model="sprint.responsible" :items="usersList" item-text="name"></v-select>
               </v-flex>
 
               <v-flex xs12 sm5 offset-sm1>
@@ -60,6 +64,7 @@
 import axios from 'axios';
 import store from '@/core';
 import { mapActions, mapGetters } from 'vuex';
+import { nameById } from '@/config'
 
 export default {
   data () {
@@ -133,12 +138,10 @@ export default {
       this.sprint = sprint;
     },
 
-    nameById (url, list, getter = 'name') {
-      let name = '';
-      let id = url.split('/').reverse()[1];
-      list.map( user => user.id == id ? name = user[getter] : null);
-      return name;
-    },
+    getName(url, list, getter = 'name'){
+      return nameById(url, list, getter)
+    }
+
 
   },
 
@@ -157,7 +160,9 @@ export default {
 
 </script>
 
-<style>
-  
+<style scoped>
+.input-group--focused{
+  color:yellow !important;
+}
 
 </style>

@@ -16,6 +16,10 @@
           <v-container fluid>
             <v-layout row wrap>
 
+              <v-flex xs10 offset-xs1>
+                <v-text-field class="input-group--focused" dark label="Nome da atividade contínua" v-model="continuousActivity.name"></v-text-field>
+              </v-flex>
+
               <v-flex xs12 sm5 offset-sm1 class="mr-1">
               <v-text-field v-if="continuousActivity.responsible" class="input-group--focused" disabled dark label="Responsável Atual" :value="nameById(continuousActivity.responsible)"></v-text-field>
               <v-text-field v-else class="input-group--focused" disabled dark label="Responsável Atual" value="Não informado"></v-text-field>

@@ -1,16 +1,21 @@
 <template>
 <v-flex xs6 sm4 md3>
     <v-card :class="tabColor">
-      <v-card-text class="text-xs-center black--text" >{{name}}</v-card-text>
-        <v-layout row wrap>
 
+      <v-card-text class="text-xs-center black--text" >{{name}}
+        <v-btn icon v-if='add' @click.native="addTask">
+          <v-icon color="black">add</v-icon>
+        </v-btn>
+      </v-card-text>
+
+        <v-layout row wrap>
           <v-flex xs12 class="mb-1" v-for="task in tasks">
             <v-card :color="cardColor" class="black--text" >
               <v-card-title>
                 <h6>{{task.name}}</h6>
               </v-card-title>
 
-              <v-flex xs12 offset-xs3>
+              <v-flex xs12 offset-xs4>
                 <v-tooltip top>
                   <v-btn icon slot="activator">
                     <v-icon color="grey darken-2">event</v-icon>
@@ -66,7 +71,7 @@
                 <v-btn icon @click.native="editTask(task.id)">
                   <v-icon color="grey darken-4">edit</v-icon>
                 </v-btn>
-                <v-btn icon @click.native="editTask(task.id)">
+                <v-btn icon @click.native="removeTask(task)">
                   <v-icon color="grey darken-4">delete</v-icon>
                 </v-btn>
               </v-card-actions>
@@ -79,21 +84,26 @@
 </template>
 
 <script>
-
-import { mapGetters } from 'vuex';
+import axios from 'axios';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   props:[
+    'add',
   	'tabColor',
   	'name',
     'cardColor',
     'tasks'
   ],
   data: () => ({
+    tasksUrl: 'task-list/',
     users: []
   }),
 
   methods: {
+    ...mapActions({
+      getTasksList : 'GETTASKS'
+    }),
 
     userById (url) {
       let name = '';
@@ -119,6 +129,24 @@ export default {
     reverseDate (date) {
       return date.split('-').reverse().join('/');
     },
+
+    addTask(){
+      this.$router.push('/add_task');
+    },
+
+    editTask(id){
+      this.$router.push({name: 'EditTask', params: { id: id }})
+    },
+
+    removeTask(task){
+      axios.delete(`${this.tasksUrl}${task.id}/`).then( res =>{
+        this.getTasksList();
+        this.$router.push({name:'Remove', params: {name: task.name}})
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   },
 
   computed:{

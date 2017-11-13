@@ -4,6 +4,7 @@
 		<card
 		tabColor="yellow darken-2"
 		name="A FAZER"
+    :add="true"
 		cardColor="yellow lighten-2"
 		:tasks="todo"
 		/>
