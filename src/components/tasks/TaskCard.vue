@@ -6,10 +6,15 @@
         <v-btn icon v-if='add' @click.native="addTask">
           <v-icon color="black">add</v-icon>
         </v-btn>
+       <!-- <v-btn @click.native="teste">teste</v-btn> -->
       </v-card-text>
 
-        <v-layout row wrap>
-          <v-flex xs12 class="mb-1" v-for="task in tasks">
+        <v-layout row wrap style="display:block;">
+
+        <draggable v-model="tasks" :options="{group:'task'}" @add="changeStatus" :move="getElement">
+        <transition-group tag="div" class="dragArea">  
+        <div v-for="task in tasks" :key="name">
+          <v-flex xs12 class="mb-1" >
             <v-card :color="cardColor" class="black--text" >
               <v-card-title>
                 <h6>{{task.name}}</h6>
@@ -20,7 +25,8 @@
                   <v-btn icon slot="activator">
                     <v-icon color="grey darken-2">event</v-icon>
                   </v-btn>
-                  <span>{{reverseDate(task.started)}}</span>
+                  <span v-if="task.started" >{{reverseDate(task.started)}}</span>
+                  <span v-else>Data não informada</span>
                 </v-tooltip>
 
                 <v-tooltip top>
@@ -77,7 +83,9 @@
               </v-card-actions>
             </v-card>
           </v-flex>
-
+        </div>
+        </transition-group>
+        </draggable>
         </v-layout>
     </v-card>
 </v-flex>
@@ -86,8 +94,11 @@
 <script>
 import axios from 'axios';
 import { mapActions, mapGetters } from 'vuex';
+import store from './store';
+import draggable from 'vuedraggable';
 
 export default {
+
   props:[
     'add',
   	'tabColor',
@@ -95,15 +106,33 @@ export default {
     'cardColor',
     'tasks'
   ],
+
+  components:{ draggable },
+
   data: () => ({
     tasksUrl: 'task-list/',
-    users: []
+    users: [],
+    temp: {}
   }),
 
   methods: {
+   //teste(){console.log(this.$store.state.tasks)},
     ...mapActions({
       getTasksList : 'GETTASKS'
     }),
+
+    getElement(evt){
+      this.$store.commit('setElement', evt.draggedContext.element)
+    },
+
+    changeStatus (evt){
+      let url = `${this.tasksUrl}${this.$store.state.tasks.element.id}/`;
+      this.name == 'A FAZER' ? this.$store.commit('setElementStatus', 1):
+        this.name == 'FAZENDO' ? this.$store.commit('setElementStatus', 2):
+          this.name == 'PENDENTE' ? this.$store.commit('setElementStatus', 3):
+            this.name == 'FEITO' ? this.$store.commit('setElementStatus', 4) : console.log('STATUS INVALIDO');
+      axios.put(url, this.$store.state.tasks.element).then(res => this.$store.commit('resetElement'))
+    },
 
     userById (url) {
       let name = '';
@@ -165,6 +194,7 @@ export default {
 </script>
 
 <style scoped>
-	
-
+.dragArea {
+  min-height: 25px;
+}
 </style>

@@ -1,34 +1,42 @@
 <template>
+
 	<v-layout row wrap xs12>
-<!-- 		<v-btn @click.native="teste">teste</v-btn> -->
+
+
 		<card
 		tabColor="yellow darken-2"
 		name="A FAZER"
     :add="true"
 		cardColor="yellow lighten-2"
 		:tasks="todo"
-		/>
+		>
+    </card>
 
 		<card
 		tabColor="blue"
 		name="FAZENDO"
 		cardColor="blue lighten-2"
 		:tasks="doing"
-		/>
+		>
+    </card>
 
 		<card
 		tabColor="green"
 		name="FEITO"
 		cardColor="green lighten-2"
 		:tasks="done"
-		/>
+		>
+      
+    </card>
 
 		<card
 		tabColor="red"
 		name="PENDENTE"
 		cardColor="red lighten-2"
 		:tasks="pending"
-		/>
+		>
+      
+    </card>
 
 	</v-layout>
 </template>
